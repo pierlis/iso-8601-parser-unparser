@@ -83,6 +83,7 @@ static NSMutableDictionary *timeZonesByOffset;
 		[defaultTimeZone release];
 		defaultTimeZone = [tz retain];
 
+        parsingCalendar.timeZone = defaultTimeZone;
 		unparsingCalendar.timeZone = defaultTimeZone;
 	}
 }
@@ -191,7 +192,7 @@ static BOOL is_leap_year(NSUInteger year);
 	NSAssert(timeSep != '\0', @"Time separator must not be NUL.");
 
 	BOOL isValidDate = ([string length] > 0U);
-	NSTimeZone *timeZone = nil;
+	NSTimeZone *timeZone = self.defaultTimeZone;
 
 	const unsigned char *ch = (const unsigned char *)[string UTF8String];
 
@@ -627,7 +628,7 @@ static BOOL is_leap_year(NSUInteger year);
 	return [self dateFromString:string timeZone:outTimeZone range:NULL];
 }
 - (NSDate *) dateFromString:(NSString *)string timeZone:(out NSTimeZone **)outTimeZone range:(out NSRange *)outRange {
-	NSTimeZone *timeZone = nil;
+	NSTimeZone *timeZone = self.defaultTimeZone;
     NSTimeInterval milliseconds = 0;
 	NSDateComponents *components = [self dateComponentsFromString:string timeZone:&timeZone range:outRange milliseconds:&milliseconds];
 	if (outTimeZone)
